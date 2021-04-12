@@ -33,18 +33,14 @@ object ResultSetConversions {
             }
         }
 
-        def singleColumnList(columnIndex: Int, null2Empty: Boolean): List[String] = {
+        def singleColumnList(columnIndex: Int, null2Empty: Boolean = true): List[String] = {
             if (null2Empty)
                 this.null2EmptyList.map(_ (columnIndex))
             else
                 this.null2NullStringList.map(_ (columnIndex))
         }
 
-        def scalar[T: ClassTag](null2Empty: Boolean): T = {
-            scalar(0, 0, null2Empty)
-        }
-
-        def scalar[T: ClassTag](rowIndex: Int, columnIndex: Int, null2Empty: Boolean): T = {
+        def scalar[T: ClassTag](rowIndex: Int = 0, columnIndex: Int = 0, null2Empty: Boolean = true): T = {
             if (null2Empty)
                 this.null2EmptyList(rowIndex)(columnIndex).asInstanceOf[T]
             else

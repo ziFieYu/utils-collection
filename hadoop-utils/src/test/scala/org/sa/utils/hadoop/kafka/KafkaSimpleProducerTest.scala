@@ -1,10 +1,10 @@
 package org.sa.utils.hadoop.kafka
 
 import org.sa.utils.hadoop.constants.KafkaConfigConstants
+import org.sa.utils.hadoop.kafka.functions.{CountCondition, ExitExceptionHandler, NumberSubstitutor, TimeSleeper}
 import org.sa.utils.hadoop.kafka.producer.SimpleKafkaProducer
 import org.sa.utils.universal.base.{Logging, StringUtils}
 import org.sa.utils.universal.config.{Config, FileConfig}
-import org.sa.utils.universal.feature.{CountCondition, ExitExceptionHandler, NumberSubstitutor, TimeSleeper}
 import org.scalatest.FunSuite
 
 /**

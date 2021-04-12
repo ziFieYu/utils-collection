@@ -11,7 +11,8 @@ import org.apache.flink.streaming.connectors.kafka.{FlinkKafkaConsumer, FlinkKaf
 import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.sa.utils.flink.common.CheckpointConfigItems
 import org.sa.utils.hadoop.kafka.config.KafkaConsumerProperties
-import org.sa.utils.universal.base.{Alerter, Logging}
+import org.sa.utils.universal.alert.Alerter
+import org.sa.utils.universal.base.Logging
 import org.sa.utils.universal.config.Config
 import org.sa.utils.universal.implicits.ArrayConversions._
 import org.sa.utils.universal.implicits.ExtendedJavaConversions._

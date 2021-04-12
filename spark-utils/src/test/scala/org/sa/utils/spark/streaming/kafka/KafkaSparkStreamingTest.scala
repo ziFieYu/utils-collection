@@ -3,17 +3,14 @@ package org.sa.utils.spark.streaming.kafka
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.spark.rdd.RDD
 import org.sa.utils.spark.streaming.{PartitionProcessor, ResultProcessor}
-import org.sa.utils.universal.base.{Alerter, Logging}
+import org.sa.utils.universal.alert.{AlertConfig, Alerter, AlerterFactory}
+import org.sa.utils.universal.base.Logging
 import org.sa.utils.universal.config.{Config, FileConfig}
 
 object KafkaSparkStreamingTest extends KafkaStreaming[String, String, String, Int] with App {
     override protected val config: Config = FileConfig()
     override protected val applicationName: String = "test"
-    override protected val alerter: Alerter = new Alerter {
-        override def alert(subject: String, content: String): Unit = {
-            println(s"【$subject】\n$content")
-        }
-    }
+    override protected val alerter: Alerter = AlerterFactory.getAlerter("print", AlertConfig(config))
     override protected val kafkaTopics = KAFKA_TOPICS.arrayValue()
     override protected val kafkaBrokers = KAFKA_BROKERS.stringValue
     override protected val kafkaConsumerGroupId = KAFKA_GROUP_ID.stringValue

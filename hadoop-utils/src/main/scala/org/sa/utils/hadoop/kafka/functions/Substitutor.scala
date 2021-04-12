@@ -1,4 +1,4 @@
-package org.sa.utils.universal.feature
+package org.sa.utils.hadoop.kafka.functions
 
 /**
  * Created by Stuart Alex on 2021/2/25.

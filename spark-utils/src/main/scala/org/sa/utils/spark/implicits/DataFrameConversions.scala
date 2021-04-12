@@ -3,16 +3,18 @@ package org.sa.utils.spark.implicits
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types._
 import org.sa.utils.universal.base.Symbols._
-import org.sa.utils.universal.cli.PrintConfig
 import org.sa.utils.universal.implicits.ArrayConversions._
 import org.sa.utils.universal.implicits.BasicConversions._
 
-object DataFrameConversions extends PrintConfig {
+object DataFrameConversions {
 
     implicit class DataFrameImplicits(dataFrame: DataFrame) {
         lazy val columns: Array[String] = dataFrame.columns
-        lazy val toArray: Array[Array[String]] = dataFrame.collect().map(e => columns.map(c => e.get(e.fieldIndex(c)).n2e(null2Empty)))
-        lazy val size: Int = this.toArray.length
+        lazy val (null2EmptyList, null2NullStringList) = {
+            val rows = dataFrame.collect()
+            (rows.map(e => columns.map(c => e.get(e.fieldIndex(c)).n2e(true))), rows.map(e => columns.map(c => e.get(e.fieldIndex(c)).n2e(false))))
+        }
+        lazy val size: Int = this.null2EmptyList.length
 
         /**
          * bool转int
@@ -59,12 +61,23 @@ object DataFrameConversions extends PrintConfig {
         /**
          * 显示DataFrame的数据
          *
-         * @param length    显示的行数
-         * @param truncate  数据长度大于this.defaultNumber时是否省略显示
-         * @param alignment 对齐方式
+         * @param render         文本渲染器
+         * @param alignment      对齐方式
+         * @param explode        是否将文本中的换行符展开
+         * @param length         显示的行数
+         * @param linefeed       强制换行的字符宽度
+         * @param flank          是否显示侧边框线
+         * @param null2Empty     是否将null值以空字符串显示
+         * @param transverse     是否显示横向框线
+         * @param truncate       是否截断显示长字符串
+         * @param truncateLength 字符串超过此长度时截断显示
+         * @param vertical       是否以垂直 column name: column value的形式显示
          */
-        def prettyShow(length: Int = length, truncate: Boolean = truncate, columns: Seq[String] = this.columns, alignment: Any = alignment): Unit = {
-            this.toArray.prettyShow(length, truncate, columns, alignment)
+        def prettyShow(render: String, alignment: Any, explode: Boolean, length: Int, linefeed: Int, flank: Boolean, null2Empty: Boolean, transverse: Boolean, truncate: Boolean, truncateLength: Int, vertical: Boolean): Unit = {
+            if (null2Empty)
+                this.null2EmptyList.prettyShow(render, alignment, explode, length, linefeed, flank, null2Empty, transverse, truncate, truncateLength, vertical, columns)
+            else
+                this.null2NullStringList.prettyShow(render, alignment, explode, length, linefeed, flank, null2Empty, transverse, truncate, truncateLength, vertical, columns)
         }
 
         /**
@@ -75,8 +88,11 @@ object DataFrameConversions extends PrintConfig {
          * @param alignment 对齐方式
          * @return
          */
-        def toTable(length: Int = length, truncate: Boolean = truncate, columns: Seq[String] = this.columns, alignment: Any = alignment, explode: => Boolean = explode): (String, Seq[String], String) = {
-            this.toArray.toTable(length, truncate, columns, alignment, explode)
+        def toTable(alignment: Any, explode: Boolean, length: Int, linefeed: Int, flank: Boolean, null2Empty: Boolean, transverse: Boolean, truncate: Boolean, truncateLength: Int, vertical: Boolean): (String, Seq[String], String) = {
+            if (null2Empty)
+                this.null2EmptyList.toTable(alignment, explode, length, linefeed, flank, null2Empty, transverse, truncate, truncateLength, vertical, columns)
+            else
+                this.null2NullStringList.toTable(alignment, explode, length, linefeed, flank, null2Empty, transverse, truncate, truncateLength, vertical, columns)
         }
 
         /**
@@ -94,13 +110,23 @@ object DataFrameConversions extends PrintConfig {
          * 转为JSON
          *
          */
-        def toJson: Seq[String] = this.toArray.toJson(columns)
+        def toJson(null2Empty: Boolean, pretty: Boolean): Seq[String] = {
+            if (null2Empty)
+                this.null2EmptyList.toJson(columns, pretty)
+            else
+                this.null2NullStringList.toJson(columns, pretty)
+        }
 
         /**
          * 垂直显示
          *
          */
-        def toVertical: Seq[String] = this.toArray.toVertical(columns)
+        def toVertical(null2Empty: Boolean): Seq[String] = {
+            if (null2Empty)
+                this.null2EmptyList.toVertical(columns)
+            else
+                this.null2NullStringList.toVertical(columns)
+        }
 
         /**
          * 转为属性表述的XML
@@ -108,7 +134,12 @@ object DataFrameConversions extends PrintConfig {
          * @param collection 根节点名称
          * @param member     第一层叶子节点名称
          */
-        def toXMLWithAttributes(collection: String, member: String): (String, Seq[String], String) = this.toArray.toXMLWithAttributes(collection, member, this.columns)
+        def toXMLWithAttributes(collection: String, member: String, null2Empty: Boolean): (String, Seq[String], String) = {
+            if (null2Empty)
+                this.null2EmptyList.toXMLWithAttributes(collection, member, this.columns)
+            else
+                this.null2NullStringList.toXMLWithAttributes(collection, member, this.columns)
+        }
 
         /**
          * 转为元素表述的XML
@@ -116,7 +147,12 @@ object DataFrameConversions extends PrintConfig {
          * @param collection 根节点名称
          * @param member     第一层叶子节点名称
          */
-        def toXMLWithElements(collection: String, member: String): (String, Seq[String], String) = this.toArray.toXMLWithElements(collection, member, this.columns)
+        def toXMLWithElements(collection: String, member: String, null2Empty: Boolean): (String, Seq[String], String) = {
+            if (null2Empty)
+                this.null2EmptyList.toXMLWithElements(collection, member, this.columns)
+            else
+                this.null2NullStringList.toXMLWithElements(collection, member, this.columns)
+        }
 
     }
 

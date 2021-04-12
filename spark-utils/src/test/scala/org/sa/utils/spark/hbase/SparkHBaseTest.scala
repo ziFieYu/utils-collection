@@ -9,10 +9,11 @@ import org.sa.utils.hadoop.hbase.implicts.HBaseImplicits._
 import org.sa.utils.hadoop.hbase.{HBaseCatalog, HBaseEnvironment}
 import org.sa.utils.spark.SparkUtils
 import org.sa.utils.spark.sql.SparkSQL
+import org.sa.utils.universal.cli.PrintConfig
 import org.sa.utils.universal.config.{Config, FileConfig}
 import org.scalatest.FunSuite
 
-class SparkHBaseTest extends FunSuite with HBaseEnvironment with ZookeeperConfigConstants {
+class SparkHBaseTest extends FunSuite with HBaseEnvironment with PrintConfig with ZookeeperConfigConstants {
     private lazy val handler = SparkHBaseHandler(zookeeperQuorum, zookeeperPort)
     override protected val config: Config = FileConfig()
     override protected val zookeeperQuorum: String = ZOOKEEPER_QUORUM.stringValue
@@ -74,6 +75,6 @@ class SparkHBaseTest extends FunSuite with HBaseEnvironment with ZookeeperConfig
         conf.set(TableInputFormat.INPUT_TABLE, "User")
         SparkUtils.getSparkSession().sparkContext
             .newAPIHadoopRDD(this.configuration, classOf[TableInputFormat], classOf[ImmutableBytesWritable], classOf[Result])
-            .foreachPartition(_.foreach(_._2.prettyShow()))
+            .foreachPartition(_.foreach(_._2.prettyShow(render, alignment, linefeed)))
     }
 }

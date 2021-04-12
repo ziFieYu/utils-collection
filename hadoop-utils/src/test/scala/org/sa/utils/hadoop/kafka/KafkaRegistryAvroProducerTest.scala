@@ -1,10 +1,10 @@
 package org.sa.utils.hadoop.kafka
 
 import io.confluent.kafka.serializers.AbstractKafkaSchemaSerDeConfig
+import org.sa.utils.hadoop.kafka.functions.{CountCondition, ExitExceptionHandler, NumberSubstitutor, TimeSleeper}
 import org.sa.utils.hadoop.kafka.producer.RegistryAvroKafkaProducer
 import org.sa.utils.universal.base.Logging
 import org.sa.utils.universal.config.{Config, ConfigTrait, FileConfig}
-import org.sa.utils.universal.feature.{CountCondition, ExitExceptionHandler, NeverStopSleeper, NumberSubstitutor, TimeSleeper}
 import org.sa.utils.universal.formats.avro.AvroUtils
 import org.scalatest.FunSuite
 

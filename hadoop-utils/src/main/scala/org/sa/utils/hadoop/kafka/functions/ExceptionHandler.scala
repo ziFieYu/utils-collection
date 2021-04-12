@@ -1,4 +1,4 @@
-package org.sa.utils.universal.feature
+package org.sa.utils.hadoop.kafka.functions
 
 import org.sa.utils.universal.base.Logging
 

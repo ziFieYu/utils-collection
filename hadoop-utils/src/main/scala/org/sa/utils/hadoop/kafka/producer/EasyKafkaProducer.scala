@@ -9,6 +9,7 @@ import java.util.Properties
 import org.apache.kafka.clients.consumer.{ConsumerRecords, KafkaConsumer, OffsetResetStrategy}
 import org.apache.kafka.clients.producer.KafkaProducer
 import org.sa.utils.hadoop.kafka.config.{KafkaConsumerProperties, KafkaProducerProperties}
+import org.sa.utils.hadoop.kafka.functions.{AlwaysTrueCondition, Condition, ExceptionHandler, NeverStopSleeper, NoSubstitutor, PrintExceptionHandler, Sleeper, Substitutor}
 import org.sa.utils.universal.base.{Mathematics, ResourceUtils, StringUtils}
 import org.sa.utils.universal.feature._
 import org.sa.utils.universal.implicits.BasicConversions._

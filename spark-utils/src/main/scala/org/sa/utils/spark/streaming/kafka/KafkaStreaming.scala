@@ -10,7 +10,7 @@ import org.apache.spark.streaming.kafka010.{CanCommitOffsets, HasOffsetRanges, K
 import org.sa.utils.hadoop.constants.KafkaConfigConstants
 import org.sa.utils.spark.common.SparkStreamingEnvironment
 import org.sa.utils.spark.streaming.{PartitionProcessor, RDDProcessor, ResultProcessor}
-import org.sa.utils.universal.base.Alerter
+import org.sa.utils.universal.alert.Alerter
 
 import scala.collection.mutable
 
