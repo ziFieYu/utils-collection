@@ -51,6 +51,16 @@
             <artifactId>scalatest_${scala.version}</artifactId>
             <version>3.0.0</version>
             <scope>test</scope>
+            <exclusions>
+                <exclusion>
+                    <artifactId>scala-library</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>scala-reflect</artifactId>
+                    <groupId>org.scala-lang</groupId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.scala-lang</groupId>

@@ -34,7 +34,7 @@
         <dependency>
             <groupId>org.sa</groupId>
             <artifactId>universal-utils</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.version}</version>
         </dependency>
     </dependencies>
 </project>

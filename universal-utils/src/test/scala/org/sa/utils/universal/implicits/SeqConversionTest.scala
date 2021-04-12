@@ -1,14 +1,13 @@
 package org.sa.utils.universal.implicits
 
-import org.sa.utils.universal.cli.PrintConfig
-import org.sa.utils.universal.config.{Config, ConfigItem, FileConfig}
+import org.sa.utils.universal.config.{Config, FileConfig}
 import org.scalatest.FunSuite
 
 /**
  * Created by Stuart Alex on 2021/4/6.
  */
-class SeqLikeConversionTest extends FunSuite with PrintConfig {
-    override implicit protected val config: Config = FileConfig()
+class SeqConversionTest extends FunSuite {
+    implicit protected val config: Config = FileConfig()
 
     test("console-table") {
         val configuredConversions = new ConfiguredConversions()

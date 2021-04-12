@@ -1,12 +1,11 @@
-package org.sa.utils.universal.base
+package org.sa.utils.universal.encryption
 
-import org.sa.utils.universal.encryption.{PasswordBasedEncryptor, RSA}
 import org.scalatest.FunSuite
 
 /**
  * Created by Stuart Alex on 2017/3/29.
  */
-class EncryptTest extends FunSuite {
+class EncryptionTest extends FunSuite {
 
     test("md5") {
         val message = "哈喽, Scala."

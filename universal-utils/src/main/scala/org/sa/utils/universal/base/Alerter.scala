@@ -3,6 +3,12 @@ package org.sa.utils.universal.base
 import org.sa.utils.universal.implicits.BasicConversions._
 import org.sa.utils.universal.openapi.{DingTalkUtils, WeChatWorkUtils}
 
+trait Alerter {
+
+    def alert(subject: String, content: String)
+
+}
+
 class MailAlerter(host: String,
                   port: Int,
                   username: String,
@@ -49,8 +55,10 @@ object NoneAlerter extends Alerter {
     }
 }
 
-trait Alerter {
-
-    def alert(subject: String, content: String)
-
+class MultiAlerter(alerterList: List[Alerter]) extends Alerter {
+    override def alert(subject: String, content: String): Unit = {
+        alerterList.foreach(_.alert(subject, content))
+    }
 }
+
+class UnsupportedAlerterException(alerterType: String) extends Exception(s"Unsupported Alerter type: $alerterType")

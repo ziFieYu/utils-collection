@@ -12,6 +12,7 @@ import org.apache.kafka.clients.consumer.OffsetResetStrategy
 import org.sa.utils.flink.common.CheckpointConfigItems
 import org.sa.utils.hadoop.kafka.config.KafkaConsumerProperties
 import org.sa.utils.universal.base.{Alerter, Logging}
+import org.sa.utils.universal.config.Config
 import org.sa.utils.universal.implicits.ArrayConversions._
 import org.sa.utils.universal.implicits.ExtendedJavaConversions._
 
@@ -21,6 +22,7 @@ import org.sa.utils.universal.implicits.ExtendedJavaConversions._
 trait CommonFlinkKafkaStreaming[T] extends Logging {
     protected val applicationName: String
     protected val alerter: Alerter
+    protected val config: Config
     protected val kafkaSourceTopic: String
     protected val kafkaBrokers: String
     protected val autoCommit: Boolean
@@ -28,12 +30,13 @@ trait CommonFlinkKafkaStreaming[T] extends Logging {
     protected val additionalConsumerConfig: Map[String, AnyRef]
     protected val deserializationSchema: DeserializationSchema[T]
     protected val checkpointEnabled: Boolean
-    protected val checkpointConfigItems: CheckpointConfigItems = null
+    protected lazy val checkpointConfigItems: CheckpointConfigItems = null
     protected val offsetResetStrategy: OffsetResetStrategy
     protected val restartStrategyConfiguration: RestartStrategyConfiguration
 
     def main(args: Array[String]): Unit = {
         try {
+            config.parseArguments(args)
             val consumerProperties: Properties =
                 KafkaConsumerProperties.builder()
                     .BOOTSTRAP_SERVERS(kafkaBrokers)
